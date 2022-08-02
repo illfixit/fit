@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover, minimal-ui" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- <link rel="icon_ios" href="./icon.png" type="image/icon type" />
+    <link rel="apple-touch-icon" href="./icon.png" />
+    <link rel="icon" type="image/png" href="./icon.png" /> -->
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-overflow-scrolling: none;
+            overflow: hidden;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout:none;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
+
+        body {
+
+        }
+
+        #input {
+            width: 80vw;
+            height: 6vh;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 20vw;
+            z-index: 10;
+            background-color: #333;
+            color:silver;
+            outline: 0;
+            border: 0px;
+        }
+        #openVideoButton {
+            width: 20vw;
+            height: 6vh;
+            position: fixed;
+            bottom: 0;
+            left: 80vw;
+            right: 0;
+            background-color: #333;
+            border: 0px;
+            border-left: 1px solid black;
+            color:silver;
+            z-index: 10;
+
+        }
+        #video {
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        #overlay {
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+        }
+    </style>
+    <title>Fit-video</title>
+</head>
+<body>
+    <input type="url" id="input"><button id="openVideoButton">Open Video</button><br>
+    <div id="overlay"></div>
+    <video src="" id="video" controls loop autoplay playsInline muted></video>
+    <script src="./hammer.min.js"></script>
+    <script>
+
+        window.addEventListener('load', function(e) {
+            setTimeout(function() { window.scrollTo(0, 1); }, 1);
+        }, false);
+
+        (() => {
+
+            var el = document.body;
+
+            // Supports most browsers and their versions.
+            var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen 
+            || el.mozRequestFullScreen || el.msRequestFullScreen;
+
+            if (requestMethod) {
+
+            // Native full screen.
+            requestMethod.call(el);
+
+            } else if (typeof window.ActiveXObject !== "undefined") {
+
+            // Older IE.
+            var wscript = new ActiveXObject("WScript.Shell");
+
+            if (wscript !== null) {
+                wscript.SendKeys("{F11}");
+            }
+            }
+            })();
+
+        let vid = document.getElementById('video');
+        let ovy = document.getElementById('overlay');
+
+
+        // vid.src = "https://rr5---sn-pouxgn8t51-jx36.googlevideo.com/videoplayback?expire=1659485114&ei=WmfpYt_LFaXbsALG-IHIBg&ip=5.79.137.247&id=o-AGJOsnjAqQIkEXGAroVVPdiu_eiwURghzpLwqDiqgQ_1&itag=399&aitags=133%2C134%2C135%2C136%2C137%2C160%2C242%2C243%2C244%2C247%2C278%2C394%2C395%2C396%2C397%2C398%2C399&source=youtube&requiressl=yes&mh=Oa&mm=31%2C29&mn=sn-pouxgn8t51-jx36%2Csn-n8v7knez&ms=au%2Crdu&mv=m&mvi=5&pl=23&gcr=ru&initcwndbps=1276250&spc=lT-KhvJuOW8Rr4eOhHENbd0pqnCYGCM&vprv=1&mime=video%2Fmp4&ns=hupOS7daFNJIIpMVcQxFSiMH&gir=yes&clen=44385474&dur=235.026&lmt=1651691124055377&mt=1659463031&fvip=13&keepalive=yes&fexp=24001373%2C24007246&c=WEB&rbqsm=fr&txp=4532434&n=a0iFo0f4n_KgRQ&sparams=expire%2Cei%2Cip%2Cid%2Caitags%2Csource%2Crequiressl%2Cgcr%2Cspc%2Cvprv%2Cmime%2Cns%2Cgir%2Cclen%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRQIhAIis-ijp2OwrN74ULM0gIZRSlKeYm-S4_vgUgJJM7FTEAiBJ4k0x5aqVzhwa2dTVRzvyQNu3IT2jacmM0Dyc0gTpmQ%3D%3D&sig=AOq0QJ8wRQIgA7NpmcBhTrNOtTRaaJh0_b_pBe_Su2vZtM_yPI2nZc4CIQDim0Au3EoUC5-4MIoWnXXezHb3MRaIGrC3jvbQQZOuwA%3D%3D"
+
+
+        let windowW = window.innerWidth;
+        // let windowH = window.innerHeight;
+        // console.log('window', windowW, windowH)
+
+        vid.addEventListener("loadedmetadata", function (e) {
+            setTimeout(window.scrollTo(1,1),0);
+        //     videoW = this.videoWidth;
+        //     videoH = this.videoHeight;
+
+        //     console.log('video', videoW, videoH)
+        //     vid.style.objectPosition = `${-videoW/2}px 0px`;
+
+        }, false );
+
+
+
+        document.getElementById('openVideoButton').onclick = function(e) {
+            vid.src = document.getElementById('input').value 
+        }
+
+        var hammertime = new Hammer(ovy, []);
+        var shift = 0;
+
+        hammertime.on('pan', function(e) {
+            // console.log()
+            shift = Math.max((e.center.x / windowW).toFixed(2), 0);
+            console.log('s', shift);
+            vid.style.objectPosition = `${shift*100}%`;
+        });
+
+        hammertime.on('click', function(e) { e.preventDefault(); return; })
+
+    </script>
+</body>
+</html>
