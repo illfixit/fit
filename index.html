@@ -27,8 +27,12 @@
 
         }
 
+        input {
+            -webkit-user-select:text;
+        }
+
         #input {
-            width: 80vw;
+            width: 60vw;
             height: 6vh;
             position: fixed;
             bottom: 0;
@@ -39,7 +43,9 @@
             color:silver;
             outline: 0;
             border: 0px;
+            border-radius: 0;
         }
+
         #openVideoButton {
             width: 20vw;
             height: 6vh;
@@ -52,8 +58,23 @@
             border-left: 1px solid black;
             color:silver;
             z-index: 10;
-
         }
+
+        #toggleVideoButton {
+            width: 20vw;
+            height: 6vh;
+            position: fixed;
+            bottom: 0;
+            left: 60vw;
+            right: 0;
+            background-color: #333;
+            border: 0px;
+            border-left: 1px solid black;
+            color:silver;
+            z-index: 10;
+        }
+
+
         #video {
             width: 100vw;
             height: 100vh;
@@ -76,13 +97,22 @@
             bottom: 0;
             z-index: 2;
         }
+
     </style>
     <title>Fit-video</title>
 </head>
 <body>
-    <input type="url" id="input"><button id="openVideoButton">Open Video</button><br>
+    <input type="url" id="input">
+    <button id="openVideoButton">Start</button>
+    <button id="toggleVideoButton">Pause</button>    
+    <br>
+
     <div id="overlay"></div>
-    <video src="" id="video" controls loop autoplay playsInline muted></video>
+    <video src="" id="video" controls loop autoplay playsInline muted preload="yes" type='video/mp4'>
+        <source src="" type="video/mp4" id="srcMp4"></source>
+        <source src="" type="video/webm" id="srcWebm"></source>
+        <source src="" type="video/mov" id="srcMov"></source>
+    </video>
     <script src="./hammer.min.js"></script>
     <script>
 
@@ -126,7 +156,8 @@
         // console.log('window', windowW, windowH)
 
         vid.addEventListener("loadedmetadata", function (e) {
-            setTimeout(window.scrollTo(1,1),0);
+            // setTimeout(window.scrollTo(1,1),0);
+            vid.play();
         //     videoW = this.videoWidth;
         //     videoH = this.videoHeight;
 
@@ -135,10 +166,22 @@
 
         }, false );
 
+        let playPause = document.getElementById("toggleVideoButton");
+        playPause.addEventListener('click',  function(e){
+            if(vid.paused) {
+                vid.play();
+            } else {
+                vid.pause();
+            }
+            playPause.innerText = playPause.innerText == "Play" ? "Pause" : "Play"; 
+        } )
 
 
         document.getElementById('openVideoButton').onclick = function(e) {
-            vid.src = document.getElementById('input').value 
+            mp4 = document.getElementById('srcMp4')
+
+            mp4.setAttribute('src', document.getElementById('input').value);
+            vid.src = document.getElementById('input').value;
         }
 
         var hammertime = new Hammer(ovy, []);
